@@ -8,6 +8,7 @@ conexao com event store (similar a uma conexao de base de dados)
 .bat file no windows
 macro no notepad++
 log4j2 eh usado no mule
+tag no bitbucket
 propriedades colocadas em uma aplicacao que eh usada pela dependencia
 
 ****************************************************File manipulation with octet-streams etc**************************************
