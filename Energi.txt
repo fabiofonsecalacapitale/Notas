@@ -11,6 +11,8 @@ log4j2 eh usado no mule
 tag no bitbucket
 propriedades colocadas em uma aplicacao que eh usada pela dependencia
 
+curso a ver: https://www.udemy.com/course/learn-oauth-2/
+
 ****************************************************File manipulation with octet-streams etc**************************************
 files are passed on the internet as stream of bytes:
 
