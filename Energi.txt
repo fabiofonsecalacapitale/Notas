@@ -3,6 +3,8 @@ pooling e paralelismo
 certificado no POSTMAN, no Java e no Chrome
 CRLF vs LF (windows vs linux)
 aprendizato de temp file e tmp nas variavies de usuario do sistema Windows
+cherry pick
+como importar um arquivo texto normal para o eclipse
 
 conexao com event store (similar a uma conexao de base de dados)
 .bat file no windows
