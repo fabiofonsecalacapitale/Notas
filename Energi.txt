@@ -5,6 +5,8 @@ CRLF vs LF (windows vs linux)
 aprendizato de temp file e tmp nas variavies de usuario do sistema Windows
 cherry pick
 como importar um arquivo texto normal para o eclipse
+Windows: software center
+Windows: services (para ver quais processos estao rodando, como rabbitmq por exemplo)
 
 conexao com event store (similar a uma conexao de base de dados)
 .bat file no windows
