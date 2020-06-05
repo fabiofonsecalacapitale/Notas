@@ -7,6 +7,7 @@ cherry pick
 como importar um arquivo texto normal para o eclipse
 Windows: software center
 Windows: services (para ver quais processos estao rodando, como rabbitmq por exemplo)
+x-correlation-id
 
 conexao com event store (similar a uma conexao de base de dados)
 .bat file no windows
