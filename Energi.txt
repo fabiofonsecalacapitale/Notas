@@ -1,7 +1,7 @@
 
 pooling e paralelismo 
 certificado no POSTMAN, no Java e no Chrome
-CRLF vs LF (windows vs linux)
+CRLF vs LF (windows vs linux). 
 aprendizato de temp file e tmp nas variavies de usuario do sistema Windows
 cherry pick
 como importar um arquivo texto normal para o eclipse
@@ -59,8 +59,13 @@ to send a file and get it on Spring, can use the MIME type multipart/form-data
 ***************************************Encryption********************************
 
 Asymetric vs symetric encryption
-  
 
+***************************************RabbitMQ********************************
+  
+Google: "Import definitions" in rabbitmq ui
+You will find links about API endpoints you can use to in rabbit
+  https://www.rabbitmq.com/definitions.html
+  and https://www.rabbitmq.com/backup.html
 
 
 
