@@ -8,6 +8,7 @@ como importar um arquivo texto normal para o eclipse
 Windows: software center
 Windows: services (para ver quais processos estao rodando, como rabbitmq por exemplo)
 x-correlation-id
+No Maven, se vc quiser fazer o download novamente de todas as dependencias, soh eh preciso trocar o path .m2\repository por outro nome, como .m2\repository-old 
 single active consumer (SAC) no rabbitmq
 jenkins tem seu proprio servidor (nao visivel para devs)
 
@@ -63,7 +64,7 @@ Asymetric vs symetric encryption
 ***************************************RabbitMQ********************************
   
 Google: "Import definitions" in rabbitmq ui
-You will find links about API endpoints you can use to in rabbit
+You will find links about API endpoints you can use in rabbit
   https://www.rabbitmq.com/definitions.html
   and https://www.rabbitmq.com/backup.html
 
