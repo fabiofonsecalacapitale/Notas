@@ -17,10 +17,17 @@ conexao com event store (similar a uma conexao de base de dados)
 macro no notepad++
 log4j2 eh usado no mule
 tag no bitbucket
-propriedades colocadas em uma aplicacao que eh usada pela dependencia
-conversor csv/json online: https://csvjson.com/
+propriedades colocadas em uma aplicacao que eh usada por uma dependencia do projeto dependencia
 
-curso a ver sobre oauth2: https://www.udemy.com/course/learn-oauth-2/
+conversor csv/json online: https://csvjson.com/
+Foi aqui que eu percebi a alteracao que precisava fazer para funcionar corretament o Bulk API.
+O payload abaixo tem o campo SVMXC__Skill_Set__c como um json em formato de String
+{"SVMXC__Skill_Set__c": "[  {    \"skillName\": \"009.A Lire un compteur\",    \"skillLevel\": 0,    \"skillId\": \"a2218000000y3F2AAI\",    \"isSkillMandatory\": true  },  {    \"skillName\": \"009.C Vérifier correspondance compteurs\",    \"skillLevel\": 0,    \"skillId\": \"a2218000000y3DaAAI\",    \"isSkillMandatory\": true  },  {    \"skillName\": \"009.D Ouvrir/Fermer vanne (BI, compteur)\",    \"skillLevel\": 0,    \"skillId\": \"a2218000000y3CwAAI\",    \"isSkillMandatory\": true  },  {    \"skillName\": \"009.F Vérifier fonct appareil -400 MBTUh\",    \"skillLevel\": 0,    \"skillId\": \"a2218000000y3IVAAY\",    \"isSkillMandatory\": true  }]"
+}
+Entretanto, no conversor do site, o escape character \" vira "" (dupla aspa) 
+A solucao eh colocar no dataweave a opcao escape="\"", dessa forma: output application/csv separator=", escape="\""
+
+
 
 ****************************************************File manipulation with octet-streams etc**************************************
 files are passed on the internet as stream of bytes:
@@ -47,6 +54,8 @@ to send a file and get it on Spring, can use the MIME type multipart/form-data
 
 
 ****************************************************oauth2**************************************
+curso a ver sobre oauth2: https://www.udemy.com/course/learn-oauth-2/
+
 - can choose the oauth2 type in the authorization header in POSTMAN
   can also choose grant_type:Client Credentials, if clientId or ClientSecret will be sent in the header as Basic Auth ans the scope
 
