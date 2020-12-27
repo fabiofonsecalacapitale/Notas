@@ -66,7 +66,12 @@ curso a ver sobre oauth2: https://www.udemy.com/course/learn-oauth-2/
 -example of sending the grant_type in the body as client_credentials
   https://auth0.com/docs/api-auth/tutorials/client-credentials
   here you can check the Content-Type needs to be application/x-www-form-urlencoded
-
+  
+- ver tbem videos sobre o assunto no javabrains: 
+  What is OAuth really all about: https://www.youtube.com/watch?v=t4-416mg6iU
+  and OAuth terminologies and flows explained: https://www.youtube.com/watch?v=3pZ3Nh8tgTE
+  ao final do segundo video, fala-se da aplicacao mais corrente do oauth2: O grant_type do tipo client_credentials, que serve para a comunicacao 
+  microservice com microservice. 
 ***************************************Encryption********************************
 
 Asymetric vs symetric encryption
@@ -76,7 +81,7 @@ Asymetric vs symetric encryption
 Google: "Import definitions" in rabbitmq ui
 You will find links about API endpoints you can use in rabbit
   https://www.rabbitmq.com/definitions.html
-  and https://www.rabbitmq.com/backup.html
+  https://www.rabbitmq.com/backup.html 
 
 
 
