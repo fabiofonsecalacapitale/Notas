@@ -259,7 +259,7 @@ Main things:
 Java Dsl and the RouteBuilder (from.to etc)
 Exchange: Camel message route builder
 Endpoints: represented by a uri. To create one of your own: http://camel.apache.org/writing-components.html. Notice the createProduce method that is there as well
-Components: http://camel.apache.org/writing-components.html. they’re associated with a name that’s used in a URI (the scheme). They are a factory of endpoints
+Components: http://camel.apache.org/writing-components.html. theyÂ’re associated with a name thatÂ’s used in a URI (the scheme). They are a factory of endpoints
            
 Producer: speaks with the actual service
 Processor: Manipulates an Exchange: it is basically a functional interface, with the method "process"
@@ -307,7 +307,7 @@ The Routes in Camel do not need necessarily to be have a destination (no "from" 
 
 INSIGHT: When making a request to a URI, if the configuration is with metainf, "Camel will auto-discover your component and register it". 
          Thas it why, when making a validation request in Studio and putting a break point there, the breakponit wil stop there ONLY in the first request
-         See http://camel.apache.org/how-do-i-add-a-component.html
+         See https://people.apache.org/~dkulp/camel/how-do-i-add-a-component.html
       
 
 *************************************************SOAP with Java CXF ***************************************************************
