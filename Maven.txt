@@ -12,7 +12,7 @@ the BOM keeps the versions in the project in sync with the    versions distribut
 http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management
 
 
-- to get the effective POM: mvn help:effective-pom
+- to get the effective POM: mvn help:effective-pom. you can also use your Eclipse to see it. It is more of a debugging tool than anything
 ******************************************************************************************
 
 group id: organization
@@ -22,7 +22,7 @@ version: your version
 <groupId>fonseca.fabio</groupId>  
 <artifactId>test2</artifactId>
 <version>0.0.1-SNAPSHOT</version>
-<packaging>jar</packaging>
+<packaging>jar</packaging>   //the default one is jar. you can ommit it if you want
 
 - you can access property variables by ${project.version} by following the xml tags
   or you can custom your own properties:
@@ -31,13 +31,15 @@ version: your version
   </properties>
   Then you use the property as ${my.plugin.version}
 
-.settings.xml
+.settings.xml (the general setting of maven). this is where you can configure other repositories and the access to it
 
-.m2: this is the local repository
+.m2: this is the local repository. It stays in the home directory by default. The dependencies are under /.m2/repositories
 
-mvn clean: clean the target file
-mvn package: will create the jar in the target folder
-mvn install: will create the jar in the local repository
+Maven includes  
+- mvn clean: clean the target file
+- mvn compile: creates the binaries (.class files)
+- mvn package: will create the jar in the target folder
+- mvn install: will create the jar in the local repository
 
 what is mvn generate sources?
 
@@ -51,7 +53,9 @@ src/main/resources
 src/test/java
 src/test/resources
 
-************************************************
+Maven is made of phases and goals, phases being made of many goals. Exanokes if of phasesL clean, compile, package, install and deploy
+
+**********************************************common tags**************************
 You can also specify that you only want the dependency available for tests with the scope tag being "test":
 <dependencies>
           <groupId>fonseca.fabio</groupId>
@@ -61,11 +65,52 @@ You can also specify that you only want the dependency available for tests with 
     </dependency>
 </dependencies>
 
+you can aso have a <dependencyManagement> section on your pom. Once you have this this tag, you declare the version in it and then you can ommit
+the version in the <dependencies> section. This is very useful to build a BOM
+<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-************************************************
-- Interesting references: 
+if you want to exclude a transitive dependency, you can do it by the tag <exclude>
 
 
+to override the default behaviour of the build, you use the <build> section. For instance:
+<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+</build>
+
+starting from java 10, you need to use a a plugin to specify the build section about the compiler. Otherwise you get an error in the build
+"source option 5 is no longer supported. use 7 or later maven"
+<plugin>
+   <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>3.8.0</version>
+      <configuration>
+         <release>10</source>
+     </configuration>
+</plugin>
+
+You also have a respositories tag that you can include in your pom (on plural sight tutorial). 
+<repositories>
+  <snapshots>
+    <enabled>true</enabled>
+  </snapshots>
+</repositories>
+
+***************************Interesting references*********************
 
 - How to Create an Executable JAR (fat jar) with Maven
  (and a uber-jar)
