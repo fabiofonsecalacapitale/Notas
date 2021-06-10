@@ -105,9 +105,13 @@ starting from java 10, you need to use a a plugin to specify the build section a
 
 You also have a respositories tag that you can include in your pom (on plural sight tutorial). 
 <repositories>
-  <snapshots>
-    <enabled>true</enabled>
-  </snapshots>
+  <repository>
+    <snapshots>
+      <id>spring-snapshot</id>
+      <url>https://repo.spring.io/libs-snapshot/</url> 
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
 </repositories>
 
 ***************************Interesting references*********************
