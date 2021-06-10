@@ -1,0 +1,404 @@
+Java Resources:
+
+For Dates in Java, use the java.time package, which is based in the JodaTime library. Do not use java.util.Date
+
+.class: instantiates an object of type Class (I know, it can be confusing)
+Example: Map.class
+
+StringUtils
+StringBuilder (faster to concatenate Strings) 
+
+ObjectMapper: Classe para manipular json objects (and xml as well)
+
+FileUtils: copia de um diretorio inteiro
+Jackson: biblioteca para serializar objeto em Json e viceversa: objectMapper
+
+xmljson converter: (http://camel.apache.org/xmljson.html)
+                   see  Json-lib link and the snippets
+
+*****
+How to read text files and put its content in a String:
+https://stackoverflow.com/questions/16027229/reading-from-a-text-file-and-storing-in-a-string
+or: 
+Spring Class ResourceLoader (see API and https://stackoverflow.com/questions/41754712/spring-boot-reading-text-file-using-resourceloader) 
+and get the resource (Resource in org.springframework.core.io.Resource) inputStream and transfer it to a String with
+ioUtils for inputStreams to turn into strings. See https://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
+use resource.getInputStream() to get the inputStream of the file (see https://stackoverflow.com/questions/41754712/spring-boot-reading-text-file-using-resourceloader)
+Example:
+
+*****
+@Autowired
+ResourceLoader resourceLoader;
+
+private String getFromFile(String fileName) throws IOException {
+		Resource resource = resourceLoader.getResource(fileName);
+		StringWriter writer = new StringWriter();
+		IOUtils.copy(resource.getInputStream(), writer);  //
+		return writer.toString();
+}
+String contentTeeFile = getFromFile("classpath:" + teeFileName);
+*****
+
+Keep in mind: to run something in a server, you need a port. With SpringBoot: server.port in a yml file does the job
+              See: https://docs.spring.io/spring-boot/docs/current/reference/html/howto-properties-and-configuration.html
+
+Sylvain explained to me: a file is a bytearray on the web. It is the client that gets it and properly transforms it into the "actual" file
+
+*****
+
+
+serializer of jackson objectmapper: @JsonFormat(shape = JsonFormat.Shape.STRING)
+see http://www.baeldung.com/jackson-jsonformat AND https://fasterxml.github.io/jackson-annotations/javadoc/2.0.0/com/fasterxml/jackson/annotation/JsonFormat.html
+
+Class RestTemplate in Spring: Makes RestCalls in Spring. The way it works: has a List of HttpMessageConverter to serialize objects in different formats (json,xml etc)
+                              It also has a series of interceptors, that is a sort of listener of the calls that will be invoked once the resttemplate makes a call
+			      https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html
+Class MockRestServiceServer: Receives a RestTemplate and binds it with it, changing the response by the specified uris with the expectation syntax.
+                             MockRestServiceServer will change the RequestFactory inside the RestTemplate object to change the responses
+                             Note: the request factory in MockServer dos not buffer streams, meaning once read, the stream is lost
+		             https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/web/client/MockRestServiceServer.html
+
+The Publish/Subscribe pattern: https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern
+                               interesting to see how messages can be filtered (topic or content based, producer or consumer based so to speak)
+
+
+
+
+*********************************************Spring***************************************************
+
+- Baeldung site has a series of very useful tutorials. You can check on their 000website. As an example, see:
+  https://www.baeldung.com/spring-boot-application-configuration
+- Official site, with documentation and guides:
+   https://spring.io/
+- To start any spring project, see:
+   https://start.spring.io/
+- Classic Eclipse Spring plugin: Spring Tool Suite 
+
+
+
+@Configuration
+@ComponentScan: tells Spring where to look for components
+@Bean: defines what can be used as a 
+injecting bean in another bean
+@Component: goes on top of classes. Means the class can be used as a bean to be injected. Other annotations define components as well, such as @Service, @Repository, @Controller
+@RequestMapping: maps the http request to the method that will be run
+@Autowired in constructor, in setter and in object. See http://www.baeldung.com/spring-autowire for different ways of injecting
+IMPORTANT INSIGHT: when we inject a bean as a property, we cannot invoke this bean in the class constructor. If you need to do this, use the autowired directly in the constructor 
+@RequestBody and @ResponseBody: used to read/convert java objects into json objects (other formats can be used as well). Needs the Jackson library
+                                you can do do @RequestBody Map<String, Object> body for instance (or an object that can be mapped clearly)
+@RestController: @Controller+ @ResponseBody. 
+@PathVariable("tenantId") 
+@RequestParam: when coming in the query parameter (after "?")
+@HTTPStatus (can tell which http status to return in the http response)
+@EntityListener
+@Value to inject a value from properties file
+       see http://www.baeldung.com/spring-value-annotation
+       You can also use the annotation inside the method parameters like this: public methodName(@Value("${modulus.studio.api.tee.validation.file}") String teeFileName)
+       Moreover, it is possible to inject a value in a property, like this: camel.icims.apiUrl=https://api.icims.com/customers/${camel.icims.customerId} where camel.icims.customerId=1357
+@ConfigurationProperties to inject a value from properties file by loose binding (from SpringBoot) 
+			 https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-typesafe-configuration-properties
+@PostMapping(value = StudioUrl.INTEGRATIONS, params = { "!templateId", "!copyTo", "duplicatedId" }) //indicates OPTIONAL  Rest parameters. (!) means it does not have this paramenter
+
+@PropertySource //specifies a file to get the externalized properties from
+@Import: used to centralize multiple @Configuration classes, like this: @Import({ ConnectServiceImportSelector.class, EnableConnectServicesRegistrar.class, ServiceDefintitionRegistrar.class })
+         see https://stackoverflow.com/questions/35502164/what-is-the-use-case-of-import-annotation
+
+
+To make manage exceptions in Spring:
+@RestControllerAdvice
+class ApiServiceExceptionManagerAdvice {
+@ExceptionHandler(value = DeleteMemberException.class)
+@ResponseStatus(HttpStatus.CONFLICT)
+public ExceptionInfo handleDeleteMemberFromGroupNotAllowedException(HttpServletRequest req,  Exception e) {
+
+
+ObjectMapper: Classe para manipular json objects
+
+ResourceLoader and Resource in Spring: very interesting (can use inputstreams to get the content of a txt file for instance.
+
+When we instantiate an object with "new" in Java, Spring does not know anything about this object and therefore, the @Autowire annotation is pointless.
+https://stackoverflow.com/questions/19896870/why-is-my-spring-autowired-field-null
+
+Spring Events (Event, Listener and Publisher)
+@EventListener
+- Main Link:  http://www.baeldung.com/spring-events
+- For only one listener (the one I used): https://dzone.com/articles/annotation-driven-event-listeners-in-spring-42   (Annotation @EventListener in the method)
+- See also: https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2
+
+@Profile and @ActiveProfiles
+@Qualifier   //used when there is more than one possible bean
+
+//Environment bean (interesting)
+@Autowired
+Environment env;
+
+@Test: Indicates this is a test method to be run
+@RunWith: necesary annotation to run tests
+@SpringApplicationConfiguration: specifies the configuration to be used in junit tests
+
+You can have a file for each environment you run (local, dev prod, staging etc) by using the name convention application-{profile}.properties. see:
+  https://docs.spring.io/spring-boot/docs/2.2.0.RELEASE/reference/html/spring-boot-features.html#boot-features-external-config-profile-specific-properties
+to activate the profile, you can use the spring tools suite plugin in Eclipse
+
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-traditional-deployment
+"Because Spring WebFlux does not strictly depend on the Servlet API and applications are deployed by default on an embedded Reactor Netty server, War deployment is not supported for WebFlux applications."
+- Tomat, Jetty and Netty
+
+
+
+*********************************************Ldap Spring***************************************************
+
+
+Ldap Lessons:
+
+Links:
+Main reference: https://docs.spring.io/spring-ldap/docs/current/reference/
+https://docs.spring.io/spring-ldap/docs/current-SNAPSHOT/reference/#traditional-java-ldap-v-s-ldaptemplate
+http://www.baeldung.com/spring-ldap and http://www.baeldung.com/spring-data-ldap
+
+Classes to use: LdapName,  LdapNameBuilder, LdapTemplate, DirContextSource, LdapQueryBuilder
+Use LdapRepository, wich allows for easy queries
+
+@Id, @Dn, @Entry(objectClasses, base etc) and @Attribute, @Transient (see section 4.2 of the first link above)
+Explanation of Dn and Rdn (index 0 is the first at the right) The class that represents a Dn in Java is LdapName: https://docs.oracle.com/javase/tutorial/jndi/newstuff/ldapname.html
+- ldapTemplate.findByDn(LdapName dn, Class<T> clazz)
+     Example: organizationUnitPeople = ldapTemplate.findByDn(organizationUnitPeopleDN, OrganizationalUnit.class);
+- or you can the ldapRepository
+- or you can use ldapTemplate.bind	 
+The persistence will be done according to the Dn (and the base. ex: @Entry(objectClasses = { "applicationEntity", "top", "extensibleObject" }, base = "ou=tenants")). 
+The Dn will tell where the entity will go (the hierarchy). For example, above, the base of the entry will be tenants. The following hierachy will depend on the Dn structure (the LdapName)
+Note: don't think the Dn is actually persisted.
+
+
+************************************************ Java, Eclipse, Maven and General ***************************************************************************
+
+***
+Java: PATH: where you can actually find the command line commands (From what I understand, when you do a javac command for instance, 
+            this needs to be a System Variable in the Operating System to be recognized. it will use the .exe files to be able to run).
+            Moreover, on windows, the PATH variables will point to the jdk folder/bin (where the .exe files are)
+            Look at: https://www.ntu.edu.sg/home/ehchua/programming/howto/Environment_Variables.html
+            Error you get if the environment variable is not set in your operating system: 'javac' is not recognized as an internal or external command, operable program or batch file.
+      CLASSPATH: see github project about this.
+ 
+Command line:     
+  javac Fabio.java: command line to compile
+  java Fabio: commandline to run the Fabio.class file
+  java -jar <name-of-jar-with-extension>	 (when there is a MANIFEST file)
+  java -cp executable.jar com.programmer.gate.HelloWorld  (when there isn't a MANIFEST file)
+  more file.txt   (reads a txt file)
+
+- running a jar in the command line links:    
+  https://www.programmergate.com/run-jar-file-command-line/
+  https://stackoverflow.com/questions/26551718/how-to-execute-jar-file-with-a-external-dependency-using-command-line-on-windows
+
+***
+
+Eclipse: - Working Sets->Projects->Packages is the hierarchy structure in java when you see it in the eclipse menu
+         - right-click the project -> properties to see the project path
+         - you can delete the project in Eclipse with no problems. The folder will remain there, unless you tick the box that says otherwise
+	 - Package Explorer: Working Sets Structure is what I usually use (And I also flat them out).        
+         - right-click -> run configurations, windows preferences (to choose jdk or add an external maven version for instance), eclipse market, right-click -> build path (configure build path). Can add jars from here
+         - copy git reference in eclipse git plugin. Then, in the usual  import project, delete project etc
+         - formatter on / off no eclipse (para nao usar ctrl+shift+f)
+         - close the project in the workspace to have the existing jar in the dependencies of other projects (not the one you are working one)
+         - call Type Hierarchy and call Hierarchy
+         - ctrl + click on a method to go to the method         
+	 - ctrl +shift+f, ctrl +shift+o, ctrl+d, ctrl+shift+i (to inspect an element)	 
+	 - Project (menu bar) -> build automatically (to be able to clean the browser and reflect this on the target file),ject-to-github-with-egit
+         - How to push a javaproject to a repository in github: https://stackoverflow.com/questions/20654719/push-eclipse-pro
+         - You have to create a java project normally and then do a Team->Share to push to a repository in the cloud (github) (with the repository already created)      
+
+	TO PROPERLY RUN, PUT THE VM-ARGUMENTS IN THE ICIMS SERVICE IN BOOT (Open Config)
+        -Dhttp.proxySet=true -Dhttp.proxyHost=nat01.log10.vpn -Dhttp.proxyPort=8080 -Dhttps.proxyHost=nat01.log10.vpn -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|*.log10.vpn"
+	
+	YOU CAN ALSO PUT variables there:
+        -Dcamel.bamboohr.apiKey=a4e31862b4c9df897c71b96434ea70025f667c93 
+
+         - Sylvain's explanation about .project file: this file is for Eclipse rather than git. What Eclipse does is having a name of the project of its own. 
+           1-) Notice this name is in Eclipse AND it does not reflect what is inside the actual folders. Then Eclipse will go to the path that is in the Resource Locations (see in the project properties)
+           and fill out the content. It is important to notice as well that, when you do a refactoring -> rename in eclipse, Eclipse will ALSO change the folder name and the location accordingly.
+           However, if you bypass Eclipse and change the name of the folder directly, Eclipse can't know you changed it and the folder it references the project won't be found anymore.
+           2-) Now, the .project file helps Eclipse know what to put in the Workspace. When you do a pull in a tree, it will update the folder you put as a reference when first importing the git tree from bitbucket
+               However, the Eclipse workspace has not been updated though. If a new project is added by a colleague, the project will be in the folder, but not in Eclipse: YOU WILL HAVE TO IMPORT IN ECLIPSE ONCE AGAIN!!!
+
+Eclipse eGit: 1-) When you have many branches in one single java project, the branches will not necessarily have the same folder structure. What happens when you change from one branch to another
+                  is that the folders start being built (and deleted) according to that branch. So it is not like the folders always exist and changing branches only changes what you see in Eclipse.
+                  It does, in fact, change the whole structure in the project folder.
+              2-) When you do a file rename or moves from one folder to another, git has a path parameter for that file. When you do a pull request in bitbucket, the git methodology should
+                  help in identifying the file amd map the old path (or name) to the correspondent file in the main branch. This will show probably as "rename" in bitbucket.
+                  Unfortunately, this is not consistent and, sometime, bitbucket does not recognize this, seeing the rename as a delete/create operation
+              3-) when you merge one branch into another, the Eclipse will show in the "History" tab the commits that have been done in both of them by time stampt order   
+
+***               
+
+maven:    - Eclipse DOES NOT make the differentiation between the source code in the test classes and the source code in the main classes. This means Eclipse will not 
+         point out to you that a given class is not accessible. When compilation happens, though, maven separation will take place and java won't compile. Pay Attention
+	  - .m2: I think it is where the maven dependencies stay (jars etc. indeed it is, This is maven's local repositoy)). They are imported to this folder, target folder (where classes are)
+          why can I actually see the jar file as a dependency when I pull from github?  
+          - Contextual Menu: right-click on project -> Maven -> Update Project -> check box "Force updates of SnapShots/Releases: -> OK
+	  - you can add your Maven version in Eclipse: Windows -> Preferences -> Installations
+          - in the pom file, if you put <scope>test</scope> in the dependency, then that dependency will be available only in the test packages
+	  - on the importance of dependency management: https://stackoverflow.com/questions/2619598/differences-between-dependencymanagement-and-dependencies-in-maven
+          https://maven.apache.org/pom.html: how to access properties (project.version) for instance or under the <properties> tag
+
+***   
+
+svg: http://pngtosvg.com/  
+     https://petercollingridge.appspot.com/svg-optimiser
+          
+***
+Chrome: changing proxys in the browser (learned that when had to access the folder white listed)
+
+*********************************************Java Camel***************************************************
+
+Interesting link about enterprise patterns:
+  https://camel.apache.org/manual/latest/enterprise-integration-patterns.html
+
+Main things:
+
+Java Dsl and the RouteBuilder (from.to etc)
+Exchange: Camel message route builder
+Endpoints: represented by a uri. To create one of your own: http://camel.apache.org/writing-components.html. Notice the createProduce method that is there as well
+Components: http://camel.apache.org/writing-components.html. they’re associated with a name that’s used in a URI (the scheme). They are a factory of endpoints
+           
+Producer: speaks with the actual service
+Processor: Manipulates an Exchange: it is basically a functional interface, with the method "process"
+In the endpoint uri, the first part is the scheme, which denotes which Camel component handles that type of endpoint (page 19)
+
+Sends requests to an endpoint:
+producerTemplate.request: used to make a request to an endpoint with a URI and a processor. A processor is a functional interface that basically manipulates an Exchange Object 
+
+@Consume: see page 446 of the book. Consume basically gets the from uri and is put in the method that you want to intercept the request
+@UriEndpoint(scheme = "adp", syntax = "adp://url", title = "ADP api endpoint"): annotation in the endpoint
+@UriParams: binds a uri parameter to a JavaVariable
+@Header, @Body etc: http://camel.apache.org/parameter-binding-annotations.html
+Obs: when you put Exchange, Camel recognizes the word and put the Exchange sent to this endpoint
+@InOut: exchangePattern from Camel
+@Consume(property = "uri"): to be placed before a method. It will consume the method
+
+ProducerTemplate IS one of the most important classes in Camel, since it makes the requests
+@Produce(uri = "mock:temp")  // creates a producerTemplate with a default uri using:
+private ProducerTemplate producerTemplate;
+producerTemplate.request(endopintUri, processor)
+or
+producerTemplate.send(endopintUri, Exchange)  (see later where this Exchange is coming from)
+or
+producerTemplate.sendBody (sends only body, used as a shortcut)  // used this in my eventlistener project for sending to the topic
+
+@Body, @Header: specify fields in the Exchange object
+
+exchange.getIn().setBody()
+exchange.getIn().setHeader()
+
+Adding a Component with an endpoint using a meta-inf (learned with greenhouse): 
+http://camel.apache.org/how-do-i-add-a-component.html
+
+Getting an exchange object with a producer:
+Exchange exchange = producerTemplate.getDefaultEndpoint().createExchange();
+
+Sends an Exchange in active mq, then sends to the Adpendpoint that will then send to the process method in the Producer, that will then speak with the actual service (tbe etc).
+
+//In ConfigurationTest ADP:
+@Autowired
+private CamelContext camelContext;
+Endpoint endpoint = camelContext.getEndpoint("adp://events/staffing/v1/applicant.onboard");
+
+The Routes in Camel do not need necessarily to be have a destination (no "from" and "to", only the "from").
+
+INSIGHT: When making a request to a URI, if the configuration is with metainf, "Camel will auto-discover your component and register it". 
+         Thas it why, when making a validation request in Studio and putting a break point there, the breakponit wil stop there ONLY in the first request
+         See http://camel.apache.org/how-do-i-add-a-component.html
+      
+
+*************************************************SOAP with Java CXF ***************************************************************
+
+SOAP with cxf framework (an implementation of the JAX-WS):
+
+Websites:
+
+- http://cxf.apache.org/docs/maven-cxf-codegen-plugin-wsdl-to-java.html  (plugin to generate the classes with wsdl2java)
+- https://www.javacodegeeks.com/2013/06/developing-soap-web-service-using-apache-cxf.html: tools to use to generate Java classes from the WSDL
+- https://examples.javacodegeeks.com/enterprise-java/jws/jax-ws-client-basic-authentication-example/
+- http://cxf.apache.org/docs/developing-a-consumer.html (ServiceName() is the default constructor...)
+- http://cxf.apache.org/docs/how-do-i-develop-a-client.html
+- http://cxf.apache.org/docs/a-simple-jax-ws-service.html
+
+- https://docs.oracle.com/javaee/5/tutorial/doc/bnayn.html  (the port acts as a proxy)
+- https://www.youtube.com/watch?v=XolvQaeRglk: interesting youtube video for SOAPUI)
+
+
+- provides a security layer
+- wsdl2java tool to create the classes from the wsdl
+- how it works description: 
+- the port as proxy to make calls to the service (see https://docs.oracle.com/javaee/5/tutorial/doc/bnayn.html). 
+- the url to call the service is in the location attribute of the address in the port.
+- the convention to specify a WSDL in a URL with ?wsdl in the end (SOAPUI uses this)
+- example of using SOAPUI on youtube: https://www.youtube.com/watch?v=XolvQaeRglk
+- SEI (Service Endpoint Interface) and the @WebService, @WebMethod annotations
+
+Some things to have in mind:
+- SOAP versions: https://stackoverflow.com/questions/736845/can-a-wsdl-indicate-the-soap-version-1-1-or-1-2-of-the-web-service
+- always use the object factory class to create objects (no new)
+- you can change the versions in cxf here: 
+    src : https://glenmazza.net/blog/entry/switch-soap11-to-soap12
+    src : https://stackoverflow.com/questions/39356351/apache-cxf-a-soap-1-2-message-is-not-valid-when-sent-to-a-soap-1-1-only-endpoin
+-cxf architecture works with interceptors
+- by googling something like "interceptor in cxf to change the action header", you get into the page http://cxf.apache.org/docs/interceptors.html
+  There Laurent found the jewel: the SoapPreProtocolOutInterceptor. I used this specifically to intercept the action that was 
+  being called by the SEI in the Ultipro class. Think you can also use the SoapActionInInterceptor.java interceptor
+
+
+
+/*******************************************Git*********************************************/
+
+- In order to use it, need to download it. Windows version: https://git-scm.com/download/win
+- Important commands: git clone, pull, push. Anything more I should know? Yes:
+- git init (starts a local repository, creating the .git folder). See https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-init
+- git config --get remote.origin.url or git remote show origin To know the repository you have pulled from. 
+  See https://stackoverflow.com/questions/4089430/how-can-i-determine-the-url-that-a-local-git-repository-was-originally-cloned-fr
+- git remote set-url origin [your new url here]    To change the remote url in your local repository
+ -The .gitignore file
+- If the file has already been tracked, than you need to exclude the folder from tracking. See
+  https://stackoverflow.com/questions/24290358/remove-a-folder-from-git-tracking
+
+- git branch             shows the branches, excluding the remote ones
+- git checkout --track origin/newsletter
+
+to create a remote repo you can do:
+- git remote add origin https://github.com/username/new_repo
+see: https://kbroman.org/github_tutorial/pages/init.html
+
+- git push origin branchName
+- git push -u origin --all
+see https://www.git-tower.com/learn/git/commands/git-push
+
+
+
+/*******************************************Encryption and undestanding https*********************************************/
+Next: encyption video, google chrome and finally the cacerts, trust store
+
+/***********************************************************************************************************************/
+
+the fact that persistence context has been removed
+
+Mule: specify a Rest api contract (validation) etc
+      Spring: dto vs raml, that can also validate the data for you
+      specify a route via annotations (@RequestMapping and so forth)
+      data transformation: xml to json
+      routing tool (one component is spring cloud gateway)
+      the 3 tier architecture
+      data composition
+      data validation
+      data composition      
+
+      good modules: aggregator, objectstore (what else?), vm, idempotent, scater gatther, webservcies with soap.
+
+      jaxb issue
+
+
+
+  
+
+
+
+
