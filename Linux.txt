@@ -1,0 +1,106 @@
+
+Summary of Udacity Linux course and Victor's learnings
+
+Course in Udacity: Linux command line basics
+https://www.udacity.com/course/linux-command-line-basics--ud595
+
+In VirtualBox, share folder is in: media/sf_(name shared folder)
+
+see:  file /etc/hosts      it sets up a local DNS
+https://www.tecmint.com/setup-local-dns-using-etc-hosts-file-in-linux/
+
+-------------------------essential command line commands------------------------------------
+
+cd (goes back to the home path)
+cd /somefolder  (absloute path)
+cd somefolder (relative path)
+use tab to autocomplete
+use && to concatenate commands: echo hello && echo bye
+ls
+echo $PATH
+On Windows: echo %JAVA_HOME%
+Ctrl+C to finish the command line from running
+ctrl+D or Ctrl+z depending on your operating system
+pwd (print working directory)
+man
+hostname  (shows the computer name for itself)
+host
+ping 
+cp
+mkdir and rmdir
+ 
+
+sudo apt-get and apt-update 
+sudo apt install nodejs=[version]  
+apt-get remove eclipse     (uninstall eclipse)
+apt remove nodejs npm      (uninstall node and npm)
+lsb_release -a             (linux standard base. provides distribution info, such as your linux version)
+
+more
+piping and redirecting (see page 40 of Algorithms book, 4th edition)
+#Creates a shortcut on Linux
+ln -s ~/Postman ~/Desktop (tilde means the home directory)
+ps aux     (lists the processes running  (think this came from the Docker course))
+whereis java (needs to be executable files)
+which
+sudo chmod -R 777 *    (Kateryna did this one to give full access to everyone in the config folder. Sorta dangerous) 
+
+
+
+---------------------------Course Notes-----------------------------------------
+
+
+-Module 1: set up with Virtual Box and Vagrant
+Vagrant file:
+single quote needs to be matched with another single quote in the command line
+vagrant up (starts the virtual machine) and then
+vagrant ssh : to login in the linux virtual machine
+exit or ctrl+D : to logout
+Ctrl+C: interrupts the program 
+curl is a command for downloading files from the web (kinda)
+
+- Difference between terminal and Shell(Gnu bash for instance)
+- Mentions shell scripting, but we wont go into it in the course
+
+/*********************************************************************/
+
+host udacity.com : looks up a name in the DNS (see 1.10 lesson)
+hostname : the computer own name for itself
+expr 2+2
+history
+uname: operating system I am running on
+cat : concatenate
+wc: word count
+diff: diff between 2 files
+man : manual of the command
+ls -l : long list. gives details such as modification time, file size etc
+
+ls -a or ls --all: prints all files - the shell usually hides files that start with a dot (interesting)
+if it starts with a dash it is a file. If it starts with a d, it is directory
+cp: create copy
+rm -rf / : VERY DANGEROUS!!! Recursevely deletes without prompting for confirmation
+
+2.10: Ctrl+D to indicate the last line (input has ended OR end of file character) - Remember Subset.java in AlgorithmsI Princeton second Assignment
+sort : called a line based program
+ping : command to ping a server. Ctrl+C: interrupt the program (see 2.10)
+the touch command (not in the course)
+pwd command
+unzip command
+echo command
+mkdir and rmdir commands
+
+^ means the ctrl key
+nano : command to edit text 
+
+3.2-) Linux have files and directories (folders)
+      Unlike Windows, there is only one root directory (no drivers such as C and D). In other words, the aren't separate roots for each disc partition
+      Linux uses forward slash instead of backslash as Windows does
+      your files can have spaces and special characters such as !. However, make sure you either escape them with a backslash or single quote the file name 
+3.4-) relative paths do not start with a slash 
+      ~ refers to your home directory
+3.6-) cd with no arguments takes you back to your home directory
+3.10-) mv and cp commands to move and copy files in linux. Create a file is: creat
+3.14-) Glob pattern in linux. Seems about the same thing as a REGEX
+
+
+

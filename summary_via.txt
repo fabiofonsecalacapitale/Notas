@@ -1,0 +1,42 @@
+
+
+
+---------------------------Aprendizados Projeto ViaRail----------------------------
+
+Redes:
+ip real, ip local, host, hostname (unico dentro da mesma rede), localhost
+command line ipconfig
+host: www.example.com (NOT example.com)
+host names are sometimes called domain names (your computer has a hostname - which is the computer's name). See:
+https://www.ibm.com/support/knowledgecenter/en/SSGMCP_5.1.0/com.ibm.cics.ts.internet.doc/topics/dfhtl28.html
+see also wikipedia article
+what is dns
+
+
+Spring Boot maven plugin (comes with the initializr) create a fat jar with on the maven build
+hostname is the machine name (see in control panel)
+how to get the hostname (machine name en effet) of the host machine in java(if running on container, will have a the hostname of the container)
+
+Learned memory management. To see the memory: bin folder in jdk: check for jvisual.exe (Manu m'a montre)
+memory: jvm memory allocation is divided in the heap
+Pier-Luc: -d32 option
+Spring Cloud Gateway is not compatible with servlets etc
+as of spring 11, JAXB is no longer included in the jdk (learned what JAXB is)
+
+what is foot print
+what is load balancing
+
+gradle init
+
+gitignore file
+git untrack files. See https://stackoverflow.com/questions/24290358/remove-a-folder-from-git-tracking
+
+filezilla: ftp transfers need a protocol, username, password and a host
+actuator
+prometheus, grafana
+what load balancing is
+hearbeat from eureka client
+virtual box
+For Virtual Box with Hyperv: go to Windows Features or "Activer ou desactiver des fonctionnalite Windows"
+
+learned RestTemplate is being depecrated and will use webflux going forward in spring

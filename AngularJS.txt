@@ -1,0 +1,109 @@
+
+
+
+****************************************Angular********************************************************
+
+Important to understand parameters and http calls: https://docs.angularjs.org/api/ngResource/service/$resource
+
+Object: {};
+Array: [];
+
+angular.module, angular.directive, angular.controller. 
+
+A module can have multiple modules inside:
+angular.module('mainModule', [
+    'module1',
+    'module2',
+    'module3'    
+]);
+
+if a variable is in $scope, call is as {{variable}} in html
+if in controller, call it {{controllerName.variable}}
+
+ng-model, ng-app, ng-controller (controller can be in the component, ie, the directive), 
+putting dependencies in another component
+ng-if, ng-show form.valid, ng-disabled (disabled is not sent in the submit form, different than read-only)
+ng-repeat track by index
+
+INSIGHT (MOST IMPORTANT):  how to capture a variable when in ng-repeat: https://stackoverflow.com/questions/32539245/changing-color-of-a-div-on-ng-click-and-resetting-rest-all-to-their-normal-color
+                           conditional class (https://stackoverflow.com/questions/7792652/what-is-the-best-way-to-conditionally-apply-a-class)
+angular.copy: creates a deep copy of an object
+this.variable
+css in the directive:
+quando passa de um dialog para outro, a variavel eh enviada dentro do $scope.
+$scope.watch
+insight: when doing $scope.watch, the watcher expression can be a string, but it works ONLY when the variable is in the scope object. If not, use a function for the watchExpression instead
+$destroy: trigerred when a scope is destroyed (ex: closing of a modal). It is trigered BEFORE the destruction of the scope, not after
+
+difference between ng-change and onchange: primeiro, porque o onchange do javascript soh acusa uma mudanca quando vc SAI daquele campo, enquanto que o angular eh REALMENTE qualquer mudanca
+                                           segundo, porque o onchange vai pegar apenas funcoes normais de javascript, mas nao vai pegar funcoes definidas no $scope, que eh um objeto Angular
+
+ng-form can be used as nested in another form tag, which is not allowed in plain html. see https://docs.angularjs.org/api/ng/directive/ngForm
+
+insight of md-selected on the tabs used in angular material(be careful with scope): https://stackoverflow.com/questions/34936155/change-index-of-angular-md-tabs-have-no-effect-at-all
+note: md-selected is the directive that represents the index of the tab currently selected. it is a two-way bind (even though I could not find this in documentation, I tested it myself)
+      to overcome this issue, I used a variable in the integrationController.js
+
+GOOD READING: Understanding Scopes: https://github.com/angular/angular.js/wiki/Understanding-Scopes
+
+insight: when you create a form in angular, angular uses the name attribute of the form and creates an object with the same name in the scope
+INSIGHT: WATCHING AN ENTIRE FORM (good for the tabs issue): https://stackoverflow.com/questions/21164611/angular-js-watch-on-form-form-inputs-validity
+insight: passing scopes to a directive: https://www.undefinednull.com/2014/02/11/mastering-the-scope-of-a-directive-in-angularjs/
+         Important to notice you pass variables in the attributes of the directive html element. Then you capture these variables in the directive definition.
+         you can do things like <my-directive-here varFabio="true"> and capture in the directive varFabio to make a two-way bind for instance, like "varFabio":"="
+         varFabio could even be an entire object being passed over, like an endpoint in modulus or a form. Important: To pass Strings, use single quote inside the double quote "'stringhere'"
+
+INSIGHT: when sending a function "to the other side" (another modal for instance), the function retains its scope, which allows to modify
+         variables in the controller where the function lies.
+INSIGHT: sacada do Maxime: passar uma variavel de referencia (um objeto {}). Assim, se eu modificar ela dentro da funcao validate, isso se reflete no outro modal tambem
+INSIGHT: Can define variables directly in angular directives in html, no need to declare it in a .js. Example: <div ng-click="fabiovarialbe=true">
+INSIGHT: When using a drop-down box (md-select in angular material), or anything using the ng-value directive, it is important to use ng-value, especially if 
+         the value is an object. Otherwise, it probably won't work
+
+When useing the $resources object to make http requests, option isArray is important and can help you quite a bit if you are expecting an array
+
+Affecting the child format when you hover in the parent: fairly easy.
+To affect the parent when you hover in the child, you need angular (html does not have this capability built-in). Create a variable in the html 
+called renameFormat for instance. Notice this variable does not need to be declared explicitly in the controller js file. Just do this:
+
+<div class="md-toolbar-tools" ng-class="{editFormat : isRenameFormat}" layout="row" layout-align="center center">            
+            <input id="resource-editor-filename" type="text"
+                   ng-model="selectedResource.name" ng-blur="isRenameFormat=false;selectEditorLanguageFromFileName()" 
+                   ng-focus="isRenameFormat=true" autocomplete="off"
+                   style="width: 100%; text-align: center;">                   
+                   <md-tooltip md-direction="bottom">Rename</md-tooltip>
+</div>
+
+Exemplo de diretiva:
+
+mcMatchWith.directive('matchWith', [FieldsMatchConfirmation]);
+
+function FieldsMatchConfirmation() {
+    return {
+        require: 'ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            function verifyPassword(value) {           	
+                var isSamePassword = defaultIfNullTo(scope[attrs.matchWith], "") == defaultIfNullTo(scope[attrs.ngModel], "");            	
+                ctrl.$setValidity('matchWith', isSamePassword);
+            }
+            
+            function defaultIfNullTo(value, defaultValue) {
+        		if (value == null) {
+        			return defaultValue;
+        		}
+        		return value;
+        	}
+
+            scope.$watch(attrs.matchWith, verifyPassword);
+            scope.$watch(attrs.ngModel, verifyPassword);
+        }
+    }
+}
+Insight: the function in the watcher expression (in the above example, verifyPassword), accepts as arguments a stream of the values the variable being watched assumes.
+         So for instance, if you call verifyPassword as verifyPassword(value) and the last value the variable being watched assumed was "hello", than value is equal "hello"
+         if the last value was "hello" and the one before that was "hi", then you can get hi by the second argument, using verifyPassword(value1, value2)
+
+
+
+
+

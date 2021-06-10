@@ -1,0 +1,217 @@
+This file is mostly a summary from the the Docler course in the pen drive
+
+Docker ID: carrielfonseca / Appfigures#3
+Docker enterprise: can run docker natively (windows home edition does not have that)
+
+Docker Community Edition: free
+Docker Edge: Beta version (choose stable)
+
+Tiny VM for windows: Hyper-V
+Hyper-V: Tool for virtual machine. Docker uses Hyper-V on Windows to be run (runs on a Linux virtual-machine on Windows)
+
+For the course, on Linux you need to install 2 more projects: docker-compose and docker-machine. The Windows and Mac docker versions have this already bundled with the standard docker installation
+
+----------------------
+
+NOTICE: docker network does not mean they have the exact same ip
+
+# See docker documentation in (CLI, Docker File reference):
+https://docs.docker.com/reference/
+
+https://docs.docker.com/engine/reference/builder/
+"In most cases, it’s best to start with an empty directory as context
+and keep your Dockerfile in that directory. Add only the 
+files needed for building the Dockerfile."
+
+---------------------------Docker Commands----------------------------
+docker version
+docker run hello-world    (is the same as docker container run hello-world)
+docker build .  (for building an image with a Docker file in the current folder. Default name is Dockerfile )
+docker image build -t myimagename .
+docker ps (or docker container ls)
+docker images (or docker image ls) lists the dokcer images you have
+docker run [imageid or image name]
+docker run -p 8081:8081 3873782f1c56      (myMachinePort:ContainerPort)
+docker container run --rm    (Automatically remove a container when it exits)
+docker run --network [NETWORK]
+docker start         (starts an already existing container)
+
+docker exec -it [CONTAINER] bash    (can interact with the shell inside the container)
+docker container run -it alpine sh
+docker container run -it centos:7 bash
+docker image tag
+docker image build --tag username/repositoryname:tagname    
+
+docker info
+docker volume ls 
+docker volume prune  (deletes volumes that are not being used)
+- to see all the containers that mount a given volume
+docker ps -a --filter volume=VOLUME_NAME_OR_MOUNT_POINT
+
+docker container run --publish 80:80 --detach --name webhost nginx
+docker container ls -a   (lists all containers, both running and not running)
+#removes the container
+docker container rm [CONTAINER]
+#forces delete even for running containers
+docker container rm -f [CONTAINER]
+docker container logs [CONTAINER]
+docker container top [CONTAINER]   (can see inside a container)
+docker image rm centos:7   (untags it if there is more than one tag)
+
+docker container inspect
+docker image inspect
+docker stats
+docker port (shows the mapping of the ports)
+docker network
+
+docker-compose up
+
+-----------------------------------------------------------
+# official reference documentation
+https://docs.docker.com
+
+# Video 2.17
+Explains core docker concepts, with the image cache and the remote repo
+
+# Video 2.20 assignment
+
+docker run -p 80:80 --name some-nginx -d nginx
+docker run -p 8080:80 --name some-httpd -d httpd
+docker run -p 3306:3306 --name some-mysql -e MYSQL_RANDOM_ROOT_PASSWORD=yes -d mysql
+
+# Video 2.22: metrics regarding the container
+What could we need to know about a container? Configuration, Memory, network etc
+docker inspect    (provides original configuration etc)
+docker stats      ( 
+docker top
+
+# Video 2.23: running shells inside a  container
+mentions alpine
+do: docker container run -it alpine sh    (sh is the alpine shell)
+docker run -it bash
+docker container exec -it bash
+exit in the commandline
+
+# Video 2.24: get the ip address of a container
+see NetworkSettings.IPAddress when running the docker inspect [NETWORK] command
+
+# Video 2.26: docker network
+docker network ls
+docker network inspect [NETWORK]	
+You can specify a network as an option in docker run [NETWORK]
+You can connect AND disconnect a container from a virtual network, plug or unplug
+
+What is a subnet?
+Mentions bridge networks, ethernet (can have two different bridge networks)
+
+# Video 2.27: docker DNS
+In docker, cannot rely on ip addresses. It is too dynamic for that
+when using a non-default bridge network, you get an extra feature: the hostname resolves to the container name (automatic DNS resolution)
+if using the default bridge connection, unfortunately this feature is not available. Instead, you would need to use the --link option. However, 
+he recommends to use the non-default network to make containers communicate with each other, since it is so much easier
+
+# Video 2.28: Assignment
+Could not make them run on their own and then make docker exec to run the bash:
+docker run -it centos:7 bash
+docker run -it ubuntu:14.04  bash
+in ubuntu, had to make an apt-get update before apt-get install
+curl --version
+for centos: 7.29
+for ubuntu: 7.35
+
+# Video 2.30: Assignment to run two containers and have the same DNS for them 
+docker container run --network my-network -d --network-alias search elasticsearch:2
+docker container run --rm --network my-network -it alpine sh
+nslookup search
+docker container run --rm --network my-network -it centos bash
+#the curl command is run from a centos container just because we need to try to reach the search DNS inside 
+#the virtual network since we did not expose this port
+curl -s search:9200
+
+#Video 3.33: Search for images on Docker website
+Go to hub.docker.com to search for images available
+What is the right image? Start with the official: best documentation
+
+In production, best practice is to specify the version when downloading an image, not leave it to be updated automatically
+In development environment
+
+#Video 3.34: Images
+Explains the image layers (2 images can share files if they have redundancies on their layers, which optmizes space)
+docker image inspect   (metadata of the image)
+docker history [IMAGE]
+When doing a docker pull [IMAGE] , if the images have the same layers, the image id will be the same. Tested with:
+- docker pull centos and docker pull centos:7    
+- To untag: docker image rm centos:7
+
+#Video 3.35: Images tagging
+syntax structure: username/repositoryname:tagname
+Command: docker image build --tag username/repositoryname:tagname
+A bit confusing: the --tag option to name an image is not really what shows in the tag column when you run docker image ls
+repository: accountid/repositoryname  (unless it is official, then can just make it repositoryname)
+
+tags are labels that point to an actual imageid
+
+
+
+#Video 3.36: DOCKER FILES
+Recipe for creating images!
+Own docker language
+Default name: Dockerfile  (can use the -f option)
+FROM
+EXPOSE   (just what port will exposed in the virtual network. nothing to do with the host)
+RUN
+CMD
+${variablename}
+
+#Video 3.37: Docker Builds
+Explains the caching structure for Docker.
+When a line changes in the Dockerfile, every subsequent line will rebuild, not using the cache. 
+That is why it is important to keep the things at the top that change the least and the things that change the most at the bottom of the file
+
+#Video 3.37: 
+WORKDIR in the Dockerfile insteadof RUN cd bla/bla
+
+
+#Video 4.42: Volumes (VERY GOOD LECTURE)
+
+Volumes are a way of dealing with persistence data in Containers in a decoupled way. You destroy the containers, but the volume is still there
+
+- you can check the mounts with docker inspect and see the source (true folder) and the destination (does not really exist, just a reference name).
+- It's interesting to see that, if you are on a Linux machine, you can actually see the true folder in the system.
+docker image inspect [IMAGE]
+docker container inspect [CONTAINER]
+docker container run -d --name some-sql2 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -v fabiosql:/var/lib/mysql mysql
+docker container run -v fabiosql:/var/lib/mysql 
+-the command above is: -v HOSTDIR:CONTAINERDIR. The ContainerDir is the Destination (the "fake" folder). you first create the volume with docker volume create fabiosql
+docker volume ls 
+- to see all the containers that mount a given volume
+docker ps -a --filter volume=VOLUME_NAME_OR_MOUNT_POINT
+- to remove all unused local volumes:
+docker volume prune
+
+When using VOLUME command in the Docker File, what you see is the Destination, not the TRUE folder. 
+The result of having a VOLUME command in the Dockerfile is that, everytime you run the container, a volume folder will be created for that container.
+
+dont quite understand the purpose for the ContainerDir. Think it is more of a reference to be used in the command line so it 
+maps to a true folder created and managed by docker. You dont really manipulate the true folder, but rather its mapping
+in the container context, the Container Dir
+
+
+Useful links:
+
+https://docs.docker.com/storage/volumes/
+https://container-solutions.com/understanding-volumes-docker/
+https://www.digitalocean.com/community/tutorials/how-to-share-data-between-the-docker-container-and-the-host
+https://stackoverflow.com/questions/42857575/how-to-determine-what-containers-use-the-docker-volume
+
+Docker philosophy of Volumes
+
+
+#Video 4.42: Volumes Assignment
+Cannot have two containers access the same volume at the same time (is this a best practice ot an actual impossibility? I was able to do it indeed)
+Most database systems dont do major upgrades automatically. Usually it requires a tool to do this upgrade
+docker container run -d  -v fabio-postgres:/var/lib/postgresql/data postgres:9.6.1
+docker container run -d  -v fabio-postgres:/var/lib/postgresql/data postgres:9.6.2
+
+
+

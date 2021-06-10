@@ -1,0 +1,118 @@
+
+------------------------Comparison C# vs Java-----------------------------
+
+See also https://www.tutorialsteacher.com/csharp
+
+.cs vs .java
+CLR: Common Language Interpreter. Equivalent of JVM
+binaries: IL (intermediate language) vs .class (bytecode)
+dll (for class library - dynamic linked library) or .exe
+namespace vs package
+Console.WriteLine vs System.out.println
+using vs import
+Conventions: constants are Pascal case rather than upper case
+C# maps to .Net data types
+references (when in .Net Framework) vs dependencies
+In Visual Studio: use Tools/Options to configure things. Equivalent of Windows/Preferences in Eclipse
+EntityFramework vs Hibernate  as a ORM
+Solution vs Project
+method name start with UpperCase letter vs method names starting with lowerCase
+checked keyword to check for overflow (by default, C# does not take care of overflow)
+Attribute vs Annotations
+In .NetCore: [Route("route/string")] or [RoutePrefix("route/string")]. In Spring: @RequestMapping
+readonly vs final
+In C#, convention for static fields is that it starts with underscore
+In C#, convention is that class variable start with underscore instead of the same name in the constructor
+In C#, convention for interfaces is that it starts with I
+Inheritance in C#: C : A     Inheritance in Java: C extends A
+C# accepts tuples. For instance, a method can return a (int, int) type
+C# seems to need the override keyword when overriding a method. Java doesn't
+C# import statements (using) provides the name of the namespace, while in Java it goes until the Java class
+C# has the syntatic sugar syntax $"Variable value: {variableName}". Java still relies on "Variable value: " + {variableName}
+C# has the object initializer syntax.   see https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-objects-by-using-an-object-initializer
+C# has the auto-implemented-properties syntax.  https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties
+C# accepts methods inside methods
+C# accepts more than one class in the same file            Java makes it one class, one file policy
+C# has anonymous types. See https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/anonymous-types
+C# has EXTENDED METHODS!!! See https://www.c-sharpcorner.com/uploadfile/puranindia/extension-methods-in-C-Sharp-3-0/
+IIS (Internet Information Service) vs Tomcat, Jboss etc
+
+
+------------------------------- Visual Studio--------------------------------------
+
+
+Better to use a pluggin like Resharper to code (unfortunately, it is paid)
+
+One Solution = One instance
+A Solution can have multiple projects though
+Use the .sln file to open up a project in Visual Studio
+Right-click in References/Manage Nuget Packages (or dependencies)
+
+Ctrl+shift+b to compile
+Ctrl+F5 to run
+Ctrl+k+d  to autoformat
+Ctrl+shift+f to search in the files
+ctrl + ; searches for a file name
+ctrl + k + c    to comment
+ctrl + k + u    to uncomment
+
+View/Other Windows/Package Manager Console
+Tools/Nuget Package Manager
+Tools/Connect to Database
+
+Nuget does not seems to bring transitive dependencies by default
+
+
+
+
+
+ 
+
+--------------------------Aprendizados do Projeto-------------------------
+Francis:
+ASP.Net is when you have a view associated with the application (MVC). A tool like Razor might be used for it
+We dont use MVC here. We use nowadays .NetCore with WebAPI  (put stackoverflow link here explaining)
+Audrey:
+Our dependencies (references) are under the folder "packages"
+Nuget will download automatically in VisualStudio (can configure in Tools/Options/Nuget Package Manager/General, check
+
+File Web.Config: where connection strings are
+
+Voir https://www.youtube.com/watch?v=gfkTfcpWqAY
+
+
+-------------------------------Ticket AM-192 (First day)--------------------------------------
+
+Database in SQL Server:
+Right-click Databases/Restore Database, Check Device in the pop up, choose your own database
+Then expand Security/Logins, right click/ new Login. Check SQL server authentication and uncheck enforce password policy. 
+In the Login Name and password, put what is inside the WebConfig file of Visual Studio
+Go to User Mapping and select the local Database you just created with reader and write roles
+And that is it
+
+How to launch the application in Visual Studio
+
+For database migration, go to View/Other Windows/Package Manager Console
+In the Console, put DataLayer as the Default Project
+Write: update-database -v    (this is an EntityFramework command)
+
+Each project has its own dll (see later if we include one project in another)
+Audrey also showed me: Right-Click in a project and click properties
+
+google maps url (see in app config): https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyB_S7J3yNgY0lEXY75438DKpinG-SEYja0&amp;address={0}&amp;sensor=false&amp;components=country:CA
+
+#Command for seeing the log file
+Get-Content -Path "2019-04-16.log" -Wait
+
+
+
+
+------------------------------------
+
+Repository or DAO
+DTO
+Model or Entity
+
+
+ 
+

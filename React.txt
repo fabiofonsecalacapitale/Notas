@@ -1,0 +1,61 @@
+
+------------------------------------
+
+npm install
+npm install --save youtube-api-search (not needed anymore). See https://stackoverflow.com/questions/19578796/what-is-the-save-option-for-npm-install
+npm start (that is actually a script that is usually included in the package.json file)
+Conditional classes: 
+voir  https://stackoverflow.com/questions/35762351/correct-way-to-handle-conditional-styling-in-react
+      https://www.npmjs.com/package/classnames
+npm config get https-proxy  OR npm config get http-proxy 
+global config in: .npmrc (usually put in the user folder on Windows)
+      
+
+
+/*****************************React**************************************/
+
+-state, props, setState (async method).
+About props: only reading (cannot change): "All React components must act like pure functions with respect to their props"
+as per https://reactjs.org/docs/components-and-props.html. Important to NEVER change the state directly after it is defined
+When in a functional component, use props. When in a class component, use this.props
+See https://reactjs.org/docs/state-and-lifecycle.html: "Converting a Function to a Class"
+- event.target.value (when having event handlers). See Stephen Grinder basic React course.
+- functional (stateless) and class components (extends React.Component). Containers: components directly linked to redux
+- react: it is the view, redux: it is the model (application data)
+- render function: JSX: type de html dedans javascript
+- use of lifecycle methods: constructor, componentWillMount, componentDidMount, ComponentWillUnmount etc. See React Documentation
+- In React, when you do a onclick event in a tag (or any other event for that matter, you pass a callback, not the actual funnction call)
+  in other words, what you need to do is write the function without the parentheses
+- this.props.children  (interesting)
+  React.Children (to manipulate children): https://mxstbr.blog/2017/02/react-children-deepdive/#manipulating-children
+- the way to change a parent state from a child is with a callback. See https://codeburst.io/no-redux-strategy-for-siblings-communication-3db543538959
+
+
+- bind functions to the class (javascript does not bind by default)
+Do a bind in the constructor for methods defined in the class this.handleClick = this.handleClick.bind(this);
+See https://reactjs.org/docs/handling-events.html
+
+- In es6, import and export methods: export default NameOfObject
+See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+- In es6, use spread operator [...state, action.data] or use Object.assign
+Check Stephen Grinder method
+- const { classes } = props; 
+same as const classes = props.classes; 
+- in es6: function(arg1 = 4), meaning that if the arg is undefined, then set it to 4
+Check on class 4.7 from Stephen Grinder 
+- in es6: import { selectBook } when NOT using default import
+- css (inline styles are a bit different): https://codeburst.io/4-four-ways-to-style-react-components-ac6f323da822
+In React, inline styles are not specified as a string. Instead they are specified with an object whose key is the camelCased version of the style name, and whose value is the style’s value, usually a string.
+
+
+
+redux: piece of state (basically the application data)
+       then you can use the combineReducers to consolidate the full app data in one place
+       reducers react to actions to change the state
+actions: Are essentially functions returning objects with a type field.
+         Essentially, these functions will flow through the reducers by using the dispatch object
+         You can do something like that: 
+	 const mapDispatchToProps = (dispatch) => ({
+    		getSchedulerNextDates: getSchedulerNextDates.bind(null, dispatch),
+	 })
+
