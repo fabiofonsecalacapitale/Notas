@@ -31,7 +31,10 @@ version: your version
   </properties>
   Then you use the property as ${my.plugin.version}
 
-.settings.xml (the general setting of maven). this is where you can configure other repositories and the access to it
+.settings.xml (the general setting of maven). this is where you can configure other repositories and the access to it.
+see: https://howtodoinjava.com/maven/maven-settings-file/
+     https://stackoverflow.com/questions/40253556/why-cant-i-find-my-settings-xml-under-m2
+     
 
 .m2: this is the local repository. It stays in the home directory by default. The dependencies are under /.m2/repositories
 
